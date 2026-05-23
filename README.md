@@ -24,7 +24,7 @@ tools from the hosted MCP server, and this adapter only handles local delivery.
 hermes plugins install qordinate-ai/watchline-hermes-plugin --enable
 ```
 
-After the first PyPI release, the package can also be installed directly:
+The package is also available on PyPI:
 
 ```bash
 python -m pip install watchline-hermes-plugin
