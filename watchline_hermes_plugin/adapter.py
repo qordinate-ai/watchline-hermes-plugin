@@ -18,14 +18,14 @@ from gateway.platforms.base import (
 )
 from gateway.session import SessionSource
 
-from watchline_hermes_plugin.client import WatchlineClient
-from watchline_hermes_plugin.config import (
+from .client import WatchlineClient
+from .config import (
     DEFAULT_API_BASE_URL,
     WATCHLINE_PLATFORM_NAME,
     config_from_platform,
     normalize_config,
 )
-from watchline_hermes_plugin.delivery import delivery_id, format_delivery, parse_delivery_channel
+from .delivery import delivery_id, format_delivery, parse_delivery_channel
 
 logger = logging.getLogger(__name__)
 
@@ -271,7 +271,7 @@ def register(ctx: Any) -> None:
 
 
 def _register_cli(ctx: Any) -> None:
-    from watchline_hermes_plugin.watchline_cli import build_cli
+    from .watchline_cli import build_cli
 
     ctx.register_cli_command(
         name=WATCHLINE_PLATFORM_NAME,

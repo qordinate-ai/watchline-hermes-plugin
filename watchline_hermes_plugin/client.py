@@ -7,7 +7,7 @@ from typing import Any
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
-from watchline_hermes_plugin.config import WatchlineConfig
+from .config import WatchlineConfig
 
 
 class WatchlineApiError(RuntimeError):
@@ -42,7 +42,7 @@ class WatchlineClient:
                 "Authorization": f"Bearer {self.config.api_key}",
                 "Content-Type": "application/json",
                 "Accept": "application/json",
-                "User-Agent": "watchline-hermes-plugin/0.1.0",
+                "User-Agent": "watchline-hermes-plugin/0.1.1",
             },
         )
         try:

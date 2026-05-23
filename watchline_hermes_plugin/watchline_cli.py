@@ -6,7 +6,7 @@ import argparse
 import json
 from typing import Any
 
-from watchline_hermes_plugin.config import (
+from .config import (
     DEFAULT_API_BASE_URL,
     DEFAULT_DELIVERY_CHANNEL,
     DEFAULT_POLL_INTERVAL_SECONDS,
@@ -84,7 +84,7 @@ def _status(_: argparse.Namespace) -> None:
 
 
 def _preview_delivery(_: argparse.Namespace) -> None:
-    from watchline_hermes_plugin.delivery import format_delivery
+    from .delivery import format_delivery
 
     print(
         format_delivery(
