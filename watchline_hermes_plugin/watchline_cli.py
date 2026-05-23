@@ -107,7 +107,7 @@ def _preview_delivery(_: argparse.Namespace) -> None:
 def _read_saved_config() -> Any:
     data = load_hermes_config()
     try:
-        platform = data["gateway"]["platforms"]["watchline"]
+        platform = data["platforms"]["watchline"]
         return normalize_config(platform.get("extra", {}))
     except Exception as error:
         raise SystemExit(

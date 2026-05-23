@@ -123,7 +123,7 @@ def patch_watchline_config(
     delivery_channel: str = DEFAULT_DELIVERY_CHANNEL,
     path: Path = HERMES_CONFIG_PATH,
 ) -> WatchlineConfig:
-    """Write both Hermes platform config and top-level Watchline config."""
+    """Write Hermes platform config and hosted Watchline MCP config."""
 
     config = normalize_config(
         {
@@ -144,8 +144,7 @@ def patch_watchline_config(
     if WATCHLINE_PLATFORM_NAME not in enabled:
         enabled.append(WATCHLINE_PLATFORM_NAME)
 
-    gateway = _ensure_dict(data, "gateway")
-    platforms = _ensure_dict(gateway, "platforms")
+    platforms = _ensure_dict(data, "platforms")
     platforms[WATCHLINE_PLATFORM_NAME] = {
         "enabled": True,
         "extra": {

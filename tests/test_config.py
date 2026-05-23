@@ -21,6 +21,6 @@ def test_configure_writes_platform_and_mcp_config():
 
         data = load_hermes_config(path)
         assert "watchline" in data["plugins"]["enabled"]
-        assert data["gateway"]["platforms"]["watchline"]["extra"]["channel_id"] == "ch_test"
+        assert data["platforms"]["watchline"]["extra"]["channel_id"] == "ch_test"
         assert data["mcp_servers"]["watchline"]["headers"]["x-watchline-channel-id"] == "ch_test"
-        assert data["gateway"]["platforms"]["watchline"]["extra"]["delivery_channel"] == "main"
+        assert data["platforms"]["watchline"]["extra"]["delivery_channel"] == "main"

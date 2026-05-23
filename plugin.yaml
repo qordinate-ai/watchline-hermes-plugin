@@ -1,7 +1,7 @@
 name: watchline
 label: Watchline
 kind: platform
-version: 0.1.1
+version: 0.1.2
 description: >
   Watchline delivery adapter for Hermes Agent. Polls a Watchline pull channel
   and forwards matched events into the Hermes gateway as inbound messages.

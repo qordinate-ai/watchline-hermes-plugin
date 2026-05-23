@@ -52,7 +52,7 @@ hermes watchline configure \
 
 The command writes:
 
-- `gateway.platforms.watchline` for delivery.
+- `platforms.watchline` for delivery.
 - `mcp_servers.watchline` for hosted watch tools.
 
 Restart the Hermes gateway after changing plugin or MCP config:

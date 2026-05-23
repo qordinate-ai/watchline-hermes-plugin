@@ -23,7 +23,6 @@ from .config import (
     DEFAULT_API_BASE_URL,
     WATCHLINE_PLATFORM_NAME,
     config_from_platform,
-    normalize_config,
 )
 from .delivery import delivery_id, format_delivery, parse_delivery_channel
 
@@ -70,6 +69,9 @@ class WatchlinePlatformAdapter(BasePlatformAdapter):
                 "messages back to Watchline."
             ),
         )
+
+    async def get_chat_info(self, chat_id: str) -> dict[str, Any]:
+        return {"name": chat_id, "type": "watchline"}
 
     async def _poll_loop(self) -> None:
         while self._running:
@@ -220,35 +222,6 @@ def env_enablement() -> dict[str, Any] | None:
     }
 
 
-def _apply_yaml_config(
-    yaml_cfg: dict[str, Any],
-    platform_cfg: dict[str, Any],
-) -> dict[str, Any] | None:
-    gateway_platforms = (
-        yaml_cfg.get("gateway", {}).get("platforms", {})
-        if isinstance(yaml_cfg.get("gateway"), dict)
-        else {}
-    )
-    raw = (
-        gateway_platforms.get(WATCHLINE_PLATFORM_NAME, {})
-        if isinstance(gateway_platforms, dict)
-        else {}
-    )
-    extra = raw.get("extra", {}) if isinstance(raw, dict) else {}
-    try:
-        normalized = normalize_config(extra)
-    except Exception:
-        return None
-    return {
-        "api_key": normalized.api_key,
-        "channel_id": normalized.channel_id,
-        "user_id": normalized.user_id,
-        "api_base_url": normalized.api_base_url,
-        "poll_interval_seconds": normalized.poll_interval_seconds,
-        "delivery_channel": normalized.delivery_channel,
-    }
-
-
 def register(ctx: Any) -> None:
     ctx.register_platform(
         name=WATCHLINE_PLATFORM_NAME,
@@ -258,7 +231,6 @@ def register(ctx: Any) -> None:
         validate_config=validate_config,
         is_connected=validate_config,
         env_enablement_fn=env_enablement,
-        apply_yaml_config_fn=_apply_yaml_config,
         allow_all_env="WATCHLINE_ALLOW_ALL_USERS",
         allowed_users_env="WATCHLINE_ALLOWED_USERS",
         platform_hint=(
