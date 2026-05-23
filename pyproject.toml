@@ -1,0 +1,48 @@
+[project]
+name = "watchline-hermes-plugin"
+version = "0.1.0"
+description = "Hermes Agent delivery adapter for Watchline."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Watchline", email = "support@qordinate.ai" }]
+keywords = ["watchline", "hermes-agent", "agents", "mcp", "plugin", "pull-delivery"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Communications",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = ["PyYAML>=6"]
+
+[project.urls]
+Homepage = "https://watch.qordinate.ai"
+Documentation = "https://watch.qordinate.ai/docs/hermes"
+Repository = "https://github.com/qordinate-ai/watchline-hermes-plugin"
+Issues = "https://github.com/qordinate-ai/watchline-hermes-plugin/issues"
+
+[project.entry-points."hermes_agent.plugins"]
+watchline = "watchline_hermes_plugin.adapter"
+
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["watchline_hermes_plugin"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.pytest.ini_options]
+addopts = ["--import-mode=importlib"]
+testpaths = ["tests"]

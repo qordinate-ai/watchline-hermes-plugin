@@ -1,0 +1,29 @@
+name: watchline
+label: Watchline
+kind: platform
+version: 0.1.0
+description: >
+  Watchline delivery adapter for Hermes Agent. Polls a Watchline pull channel
+  and forwards matched events into the Hermes gateway as inbound messages.
+author: Watchline
+optional_env:
+  - name: WATCHLINE_API_KEY
+    description: "Watchline project API key"
+    prompt: "Watchline API key"
+    password: true
+  - name: WATCHLINE_CHANNEL_ID
+    description: "Watchline pull channel ID"
+    prompt: "Watchline channel ID"
+    password: false
+  - name: WATCHLINE_USER_ID
+    description: "Stable Watchline user_id for this Hermes workspace"
+    prompt: "Watchline user ID"
+    password: false
+  - name: WATCHLINE_API_BASE_URL
+    description: "Watchline API base URL"
+    prompt: "Watchline API base URL"
+    password: false
+  - name: WATCHLINE_DELIVERY_CHANNEL
+    description: "Hermes delivery target. Defaults to main home channel."
+    prompt: "Hermes delivery channel"
+    password: false
