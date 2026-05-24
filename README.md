@@ -74,6 +74,18 @@ When a matching event arrives, Watchline queues it on your pull channel. The
 plugin polls that channel, runs Hermes against your main/home channel, and
 acknowledges the delivery only after Hermes accepts it.
 
+## Why a Hermes Plugin?
+
+Hermes also has a built-in webhook adapter for external events. That is a good
+option when your Hermes gateway already has a public URL, reverse proxy, or
+tunnel and you want Watchline to push matched events directly into Hermes.
+
+This plugin uses Watchline pull delivery instead. Hermes runs locally, polls the
+Watchline channel, and injects matched events into the gateway without requiring
+your Hermes agent to expose an inbound webhook endpoint online. You can still
+use Hermes webhooks separately for deployments where a public callback URL is
+already part of your setup.
+
 ## Commands
 
 ```bash

@@ -70,9 +70,6 @@ class WatchlinePlatformAdapter(BasePlatformAdapter):
             ),
         )
 
-    async def get_chat_info(self, chat_id: str) -> dict[str, Any]:
-        return {"name": chat_id, "type": "watchline"}
-
     async def _poll_loop(self) -> None:
         while self._running:
             try:
@@ -104,11 +101,12 @@ class WatchlinePlatformAdapter(BasePlatformAdapter):
         return delivered
 
     async def _deliver(self, delivery: dict[str, Any]) -> None:
-        if not self.gateway_runner:
+        runner = self._gateway_runner()
+        if not runner:
             raise RuntimeError("Hermes gateway runner is not ready.")
         if not self._message_handler:
             raise RuntimeError("Hermes gateway message handler is not ready.")
-        source = self._resolve_delivery_source(delivery)
+        source = self._resolve_delivery_source(delivery, runner)
         message_id = delivery_id(delivery) or None
         event = MessageEvent(
             text=format_delivery(delivery),
@@ -119,11 +117,11 @@ class WatchlinePlatformAdapter(BasePlatformAdapter):
             timestamp=datetime.now(),
             internal=True,
         )
-        response_text = await self.gateway_runner._handle_message(event)
+        response_text = await self._message_handler(event)
         if not response_text:
             return
 
-        adapter = self.gateway_runner.adapters.get(source.platform)
+        adapter = runner.adapters.get(source.platform)
         if not adapter:
             raise RuntimeError(f"Hermes adapter for {source.platform.value} is not active.")
         metadata = {"thread_id": source.thread_id} if source.thread_id else None
@@ -135,10 +133,18 @@ class WatchlinePlatformAdapter(BasePlatformAdapter):
         if not getattr(result, "success", False):
             raise RuntimeError(getattr(result, "error", "Hermes send returned success=False"))
 
-    def _resolve_delivery_source(self, delivery: dict[str, Any]) -> SessionSource:
+    def _gateway_runner(self) -> Any | None:
+        if self.gateway_runner:
+            return self.gateway_runner
+        runner = getattr(self._message_handler, "__self__", None)
+        if runner:
+            self.gateway_runner = runner
+        return runner
+
+    def _resolve_delivery_source(self, delivery: dict[str, Any], runner: Any) -> SessionSource:
         channel = parse_delivery_channel(self.watchline_config.delivery_channel)
         if channel.is_main:
-            platform, chat_id, chat_name, thread_id = self._main_home_channel()
+            platform, chat_id, chat_name, thread_id = self._main_home_channel(runner)
         else:
             platform = Platform(channel.platform or "")
             if channel.chat_id:
@@ -146,7 +152,7 @@ class WatchlinePlatformAdapter(BasePlatformAdapter):
                 chat_name = channel.chat_id
                 thread_id = channel.thread_id
             else:
-                home = self.gateway_runner.config.get_home_channel(platform)
+                home = runner.config.get_home_channel(platform)
                 if not home or not home.chat_id:
                     raise RuntimeError(
                         f"No Hermes home channel configured for {platform.value}; "
@@ -169,7 +175,7 @@ class WatchlinePlatformAdapter(BasePlatformAdapter):
             message_id=message_id,
         )
 
-    def _main_home_channel(self) -> tuple[Platform, str, str, str | None]:
+    def _main_home_channel(self, runner: Any) -> tuple[Platform, str, str, str | None]:
         excluded = {
             self.platform,
             Platform.LOCAL,
@@ -177,10 +183,10 @@ class WatchlinePlatformAdapter(BasePlatformAdapter):
             Platform.WEBHOOK,
             Platform.MSGRAPH_WEBHOOK,
         }
-        for platform in self.gateway_runner.adapters:
+        for platform in runner.adapters:
             if platform in excluded:
                 continue
-            home = self.gateway_runner.config.get_home_channel(platform)
+            home = runner.config.get_home_channel(platform)
             if home and home.chat_id:
                 return (
                     platform,
