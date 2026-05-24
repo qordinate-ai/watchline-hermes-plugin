@@ -42,7 +42,7 @@ class WatchlineClient:
                 "Authorization": f"Bearer {self.config.api_key}",
                 "Content-Type": "application/json",
                 "Accept": "application/json",
-                "User-Agent": "watchline-hermes-plugin/0.1.2",
+                "User-Agent": "watchline-hermes-plugin/0.1.3",
             },
         )
         try:
