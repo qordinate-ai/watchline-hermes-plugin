@@ -43,6 +43,13 @@ class WatchlinePlatformAdapter(BasePlatformAdapter):
     def name(self) -> str:
         return "Watchline"
 
+    async def get_chat_info(self, chat_id: str) -> dict[str, Any]:
+        return {
+            "chat_id": chat_id,
+            "name": "Watchline",
+            "type": "dm",
+        }
+
     async def connect(self) -> bool:
         self._running = True
         self._poll_task = asyncio.create_task(self._poll_loop())
