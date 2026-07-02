@@ -74,6 +74,10 @@ When a matching event arrives, Watchline queues it on your pull channel. The
 plugin polls that channel, runs Hermes against your main/home channel, and
 acknowledges the delivery only after Hermes accepts it.
 
+## Companion X/Twitter Checks
+
+For social monitoring workflows, pair Watchline with [Hermes Tweet](https://github.com/Xquik-dev/hermes-tweet). Watchline can deliver the external trigger into Hermes, then Hermes Tweet can read the relevant X/Twitter accounts, posts, or trends and return the summary through the normal Watchline delivery path.
+
 ## Why a Hermes Plugin?
 
 Hermes also has a built-in webhook adapter for external events. That is a good
